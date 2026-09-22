@@ -1,0 +1,329 @@
+<!DOCTYPE html>
+<html lang="zh-TW" class="h-full">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>極簡黑白設計師名片 | Minimalist Designer Card</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Google Font - Inter -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <!-- FontAwesome for Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                    },
+                    letterSpacing: {
+                        widest: '.2em',
+                        mega: '.3em',
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        /* Custom scrollbar and sleek interactions */
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #0a0a0a;
+            color: #ffffff;
+        }
+
+        /* Subtle grid background pattern */
+        .bg-grid-pattern {
+            background-size: 30px 30px;
+            background-image: 
+                linear-gradient(to right, rgba(255, 255, 255, 0.03) 1px, transparent 1px),
+                linear-gradient(to bottom, rgba(255, 255, 255, 0.03) 1px, transparent 1px);
+        }
+
+        /* Custom high contrast focus and hover transitions */
+        .card-container {
+            backdrop-filter: blur(16px);
+            transition: all 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        .avatar-frame {
+            transition: all 0.4s ease;
+        }
+
+        .card-container:hover .avatar-frame {
+            transform: scale(1.02);
+            border-color: #ffffff;
+        }
+
+        /* Inverted hover button effect */
+        .btn-contrast {
+            position: relative;
+            overflow: hidden;
+            transition: all 0.3s ease;
+        }
+
+        .btn-contrast::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: #ffffff;
+            transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+            z-index: 0;
+        }
+
+        .btn-contrast:hover::before {
+            left: 0;
+        }
+
+        .btn-contrast span, .btn-contrast i {
+            position: relative;
+            z-index: 1;
+            transition: color 0.3s ease;
+        }
+
+        .btn-contrast:hover span, .btn-contrast:hover i {
+            color: #000000;
+        }
+
+        /* Modal backdrop transition */
+        .modal-backdrop {
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.3s ease;
+        }
+
+        .modal-backdrop.active {
+            opacity: 1;
+            pointer-events: auto;
+        }
+
+        .modal-content {
+            transform: scale(0.95) translateY(10px);
+            transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        .modal-backdrop.active .modal-content {
+            transform: scale(1) translateY(0);
+        }
+    </style>
+</head>
+
+<body class="h-full flex items-center justify-center bg-grid-pattern p-4 sm:p-6 overflow-x-hidden antialiased selection:bg-white selection:text-black">
+
+    <!-- Main Center Wrapper -->
+    <main class="w-full max-w-md relative z-10">
+        
+        <!-- Minimal Card Container -->
+        <div class="card-container bg-black/80 border border-neutral-800 rounded-2xl p-8 sm:p-10 shadow-2xl relative overflow-hidden group">
+            
+            <!-- Top Subtle Status Indicator -->
+            <div class="flex items-center justify-between mb-8 text-xs tracking-widest text-neutral-400 uppercase">
+                <span class="inline-flex items-center gap-2">
+                    <span class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
+                    Available for projects
+                </span>
+                <span class="text-neutral-600 font-mono">2026 EDITION</span>
+            </div>
+
+            <!-- Avatar Section (Minimalist Line Frame) -->
+            <div class="flex justify-center mb-8">
+                <div class="avatar-frame relative w-28 h-28 sm:w-32 sm:h-32 rounded-full border-2 border-neutral-700 p-1.5 flex items-center justify-center bg-neutral-900/50">
+                    <!-- Image or Minimalist Graphic Placeholder -->
+                    <div class="w-full h-full rounded-full bg-neutral-950 flex flex-col items-center justify-center overflow-hidden border border-neutral-800 text-neutral-400 relative group-hover:text-white transition-colors">
+                        <!-- High Contrast Minimal Avatar Graphic -->
+                        <svg class="w-12 h-12 stroke-current" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.2">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 6a3.75 3.75 0 11-7.5 0 3.75 3.75 0 017.5 0zM4.501 20.118a7.5 7.5 0 0114.998 0A17.933 17.933 0 0112 21.75c-2.676 0-5.216-.584-7.499-1.632z" />
+                        </svg>
+                    </div>
+                    <!-- Minimalist decorative badge -->
+                    <div class="absolute -bottom-1 -right-1 bg-white text-black text-[10px] font-bold px-2 py-0.5 rounded-full uppercase tracking-widest shadow-md">
+                        PRO
+                    </div>
+                </div>
+            </div>
+
+            <!-- Name and Title -->
+            <div class="text-center mb-8">
+                <h1 class="text-2xl sm:text-3xl font-bold tracking-tight text-white mb-2">
+                    張睿芯
+                </h1>
+                <p class="text-xs sm:text-sm tracking-mega text-neutral-400 uppercase font-medium mb-4">
+                    Lead UI/UX & Brand Designer
+                </p>
+                <div class="w-8 h-0.5 bg-white mx-auto opacity-80"></div>
+            </div>
+
+            <!-- Minimal Social Links -->
+            <div class="flex justify-center items-center gap-5 mb-8">
+                <a href="#" class="w-10 h-10 rounded-full border border-neutral-800 bg-neutral-900/40 flex items-center justify-center text-neutral-400 hover:text-white hover:border-white hover:bg-black transition-all" aria-label="Behance">
+                    <i class="fa-brands fa-behance text-lg"></i>
+                </a>
+                <a href="#" class="w-10 h-10 rounded-full border border-neutral-800 bg-neutral-900/40 flex items-center justify-center text-neutral-400 hover:text-white hover:border-white hover:bg-black transition-all" aria-label="Dribbble">
+                    <i class="fa-brands fa-dribbble text-lg"></i>
+                </a>
+                <a href="#" class="w-10 h-10 rounded-full border border-neutral-800 bg-neutral-900/40 flex items-center justify-center text-neutral-400 hover:text-white hover:border-white hover:bg-black transition-all" aria-label="Instagram">
+                    <i class="fa-brands fa-instagram text-lg"></i>
+                </a>
+                <a href="#" class="w-10 h-10 rounded-full border border-neutral-800 bg-neutral-900/40 flex items-center justify-center text-neutral-400 hover:text-white hover:border-white hover:bg-black transition-all" aria-label="LinkedIn">
+                    <i class="fa-brands fa-linkedin-in text-lg"></i>
+                </a>
+            </div>
+
+            <!-- Action Buttons Container -->
+            <div class="space-y-3">
+                <!-- Main Action Button -->
+                <button id="openModalBtn" class="btn-contrast w-full py-3.5 px-6 rounded-xl border border-white bg-black text-white text-xs font-semibold uppercase tracking-widest flex items-center justify-center gap-3 group">
+                    <span>GET IN TOUCH</span>
+                    <i class="fa-solid fa-arrow-right text-xs group-hover:translate-x-1 transition-transform"></i>
+                </button>
+
+                <!-- Secondary Portfolio Link -->
+                <button id="copyEmailBtn" class="w-full py-3.5 px-6 rounded-xl border border-neutral-800 bg-neutral-900/50 hover:bg-neutral-800 text-neutral-300 hover:text-white text-xs font-medium uppercase tracking-widest flex items-center justify-center gap-2 transition-all">
+                    <i class="fa-regular fa-copy text-xs"></i>
+                    <span id="copyBtnText">COPY EMAIL ADDRESS</span>
+                </button>
+            </div>
+
+            <!-- Footer Meta Info -->
+            <div class="mt-8 pt-6 border-t border-neutral-900 text-center">
+                <p class="text-[10px] tracking-widest text-neutral-500 uppercase">
+                    TAIPEI &bull; TOKYO &bull; REMOTE
+                </p>
+            </div>
+        </div>
+    </main>
+
+    <!-- Interactive Contact Modal -->
+    <div id="contactModal" class="modal-backdrop fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-md">
+        <div class="modal-content w-full max-w-sm bg-neutral-950 border border-neutral-800 rounded-2xl p-6 sm:p-8 relative shadow-2xl">
+            <!-- Close Modal Button -->
+            <button id="closeModalBtn" class="absolute top-5 right-5 text-neutral-400 hover:text-white transition-colors">
+                <i class="fa-solid fa-xmark text-lg"></i>
+            </button>
+
+            <!-- Modal Header -->
+            <div class="mb-6 text-center">
+                <h3 class="text-xl font-bold text-white tracking-tight mb-1">Start a Conversation</h3>
+                <p class="text-xs text-neutral-400 tracking-wider uppercase">Send a direct inquiry</p>
+            </div>
+
+            <!-- Minimal Form -->
+            <form id="contactForm" class="space-y-4" onsubmit="handleFormSubmit(event)">
+                <div>
+                    <label class="block text-[10px] font-semibold tracking-widest uppercase text-neutral-400 mb-1.5">Your Name</label>
+                    <input type="text" required placeholder="John Doe" class="w-full bg-neutral-900 border border-neutral-800 rounded-lg px-3.5 py-2.5 text-sm text-white focus:outline-none focus:border-white transition-colors">
+                </div>
+
+                <div>
+                    <label class="block text-[10px] font-semibold tracking-widest uppercase text-neutral-400 mb-1.5">Your Email</label>
+                    <input type="email" required placeholder="john@example.com" class="w-full bg-neutral-900 border border-neutral-800 rounded-lg px-3.5 py-2.5 text-sm text-white focus:outline-none focus:border-white transition-colors">
+                </div>
+
+                <div>
+                    <label class="block text-[10px] font-semibold tracking-widest uppercase text-neutral-400 mb-1.5">Message</label>
+                    <textarea rows="3" required placeholder="Tell me about your project..." class="w-full bg-neutral-900 border border-neutral-800 rounded-lg px-3.5 py-2.5 text-sm text-white focus:outline-none focus:border-white transition-colors resize-none"></textarea>
+                </div>
+
+                <button type="submit" class="w-full py-3 bg-white text-black font-semibold text-xs uppercase tracking-widest rounded-lg hover:bg-neutral-200 transition-colors">
+                    Send Message
+                </button>
+            </form>
+
+            <!-- Success Notification Message Box inside Modal -->
+            <div id="modalSuccess" class="hidden text-center py-6">
+                <div class="w-12 h-12 bg-white text-black rounded-full flex items-center justify-center mx-auto mb-3">
+                    <i class="fa-solid fa-check text-xl"></i>
+                </div>
+                <p class="text-sm font-semibold text-white mb-1">Message Sent!</p>
+                <p class="text-xs text-neutral-400 mb-4">Thank you for reaching out. I'll get back to you shortly.</p>
+                <button onclick="toggleModal(false)" class="text-xs text-neutral-300 underline underline-offset-4 hover:text-white uppercase tracking-wider">
+                    Close Window
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Modal Control Elements
+        const modal = document.getElementById('contactModal');
+        const openModalBtn = document.getElementById('openModalBtn');
+        const closeModalBtn = document.getElementById('closeModalBtn');
+        const copyEmailBtn = document.getElementById('copyEmailBtn');
+        const copyBtnText = document.getElementById('copyBtnText');
+        const contactForm = document.getElementById('contactForm');
+        const modalSuccess = document.getElementById('modalSuccess');
+
+        // Designer Contact Email
+        const DESIGNER_EMAIL = 'alex.chen@design.studio';
+
+        // Function to Toggle Modal
+        function toggleModal(show) {
+            if (show) {
+                modal.classList.add('active');
+                // Reset form state on open
+                contactForm.classList.remove('hidden');
+                modalSuccess.classList.add('hidden');
+            } else {
+                modal.classList.remove('active');
+            }
+        }
+
+        // Event Listeners for Modal
+        openModalBtn.addEventListener('click', () => toggleModal(true));
+        closeModalBtn.addEventListener('click', () => toggleModal(false));
+
+        // Close Modal when clicking background
+        modal.addEventListener('click', (e) => {
+            if (e.target === modal) {
+                toggleModal(false);
+            }
+        });
+
+        // Close on ESC key
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape' && modal.classList.contains('active')) {
+                toggleModal(false);
+            }
+        });
+
+        // Copy Email to Clipboard Functionality
+        copyEmailBtn.addEventListener('click', () => {
+            // Fallback clipboard logic using standard element creation for secure frames
+            const dummyInput = document.createElement('input');
+            document.body.appendChild(dummyInput);
+            dummyInput.value = DESIGNER_EMAIL;
+            dummyInput.select();
+            document.execCommand('copy');
+            document.body.removeChild(dummyInput);
+
+            // Visual feedback UI update
+            const originalText = 'COPY EMAIL ADDRESS';
+            copyBtnText.innerText = 'COPIED TO CLIPBOARD!';
+            copyEmailBtn.classList.add('border-white', 'text-white');
+
+            setTimeout(() => {
+                copyBtnText.innerText = originalText;
+                copyEmailBtn.classList.remove('border-white', 'text-white');
+            }, 2000);
+        });
+
+        // Form Submit Handler
+        function handleFormSubmit(event) {
+            event.preventDefault();
+            
+            // Show success message state
+            contactForm.classList.add('hidden');
+            modalSuccess.classList.remove('hidden');
+            contactForm.reset();
+        }
+    </script>
+</body>
+</html>
