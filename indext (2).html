@@ -1,0 +1,503 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>張睿芯 | Senior Product Designer</title>
+  <!-- Google Fonts: Inter & Noto Sans TC -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Noto+Sans+TC:wght@300;400;500;700&display=swap" rel="stylesheet">
+  
+  <style>
+    /* ==========================================================================
+       1. 全局重置與變數 (Reset & Variables)
+       ========================================================================== */
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    :root {
+      --bg-color: #080808;
+      --card-bg: #121212;
+      --card-border: #282828;
+      --text-main: #ffffff;
+      --text-muted: #888888;
+      --accent-white: #ffffff;
+      --accent-gray: #222222;
+      --btn-hover: #333333;
+      --grid-line: rgba(255, 255, 255, 0.03);
+    }
+
+    body {
+      font-family: 'Inter', 'Noto Sans TC', -apple-system, BlinkMacSystemFont, sans-serif;
+      background-color: var(--bg-color);
+      color: var(--text-main);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      padding: 24px;
+      transition: background-color 0.4s ease, color 0.4s ease;
+      position: relative;
+      overflow-x: hidden;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    /* 極簡動態幾何背景點陣 */
+    body::before {
+      content: "";
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-image: 
+        radial-gradient(circle, rgba(255,255,255,0.07) 1px, transparent 1px);
+      background-size: 24px 24px;
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    /* ==========================================================================
+       2. 三種背景主題 (Theme Modes)
+       ========================================================================== */
+    /* 主題 1: 深沉極黑 (Default Dark) */
+    body.theme-dark {
+      --bg-color: #080808;
+      --card-bg: #121212;
+      --card-border: #282828;
+      --text-main: #ffffff;
+      --text-muted: #888888;
+      --grid-line: rgba(255, 255, 255, 0.03);
+    }
+
+    /* 主題 2: 藝廊純白 (Studio Light) */
+    body.theme-light {
+      --bg-color: #f2f2f4;
+      --card-bg: #ffffff;
+      --card-border: #e0e0e0;
+      --text-main: #000000;
+      --text-muted: #666666;
+      --grid-line: rgba(0, 0, 0, 0.04);
+    }
+    body.theme-light::before {
+      background-image: radial-gradient(circle, rgba(0,0,0,0.08) 1px, transparent 1px);
+    }
+
+    /* 主題 3: 網格灰色調 (Monochrome Grid) */
+    body.theme-grid {
+      --bg-color: #1a1a1e;
+      --card-bg: #222228;
+      --card-border: #3a3a42;
+      --text-main: #ffffff;
+      --text-muted: #a0a0ab;
+      --grid-line: rgba(255, 255, 255, 0.05);
+    }
+
+    /* ==========================================================================
+       3. 控制區：背景切換選單 (Theme Switcher Control)
+       ========================================================================== */
+    .controls-wrapper {
+      position: relative;
+      z-index: 10;
+      margin-bottom: 28px;
+    }
+
+    .theme-switcher {
+      display: flex;
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      padding: 4px;
+      border-radius: 40px;
+      backdrop-filter: blur(12px);
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+    }
+
+    body.theme-light .theme-switcher {
+      background: rgba(0, 0, 0, 0.05);
+      border-color: rgba(0, 0, 0, 0.1);
+    }
+
+    .theme-btn {
+      background: transparent;
+      border: none;
+      color: var(--text-muted);
+      padding: 8px 16px;
+      font-size: 0.75rem;
+      font-weight: 600;
+      letter-spacing: 1px;
+      border-radius: 30px;
+      cursor: pointer;
+      transition: all 0.25s ease;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .theme-btn .dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      display: inline-block;
+    }
+
+    .theme-btn[data-theme="dark"] .dot { background: #080808; border: 1px solid #666; }
+    .theme-btn[data-theme="light"] .dot { background: #ffffff; border: 1px solid #ccc; }
+    .theme-btn[data-theme="grid"] .dot { background: #1a1a1e; border: 1px solid #888; }
+
+    .theme-btn:hover {
+      color: var(--text-main);
+    }
+
+    .theme-btn.active {
+      background: var(--text-main);
+      color: var(--bg-color);
+      box-shadow: 0 2px 10px rgba(0,0,0,0.15);
+    }
+
+    /* ==========================================================================
+       4. 名片主體與懸停 HOVER 動態效果 (Card & Hover Effects)
+       ========================================================================== */
+    .card-container {
+      position: relative;
+      z-index: 1;
+      width: 100%;
+      max-width: 380px;
+    }
+
+    .card {
+      background: var(--card-bg);
+      border: 1px solid var(--card-border);
+      border-radius: 24px;
+      padding: 40px 32px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+
+      /* 3. 動態時間為 0.3 秒，並帶有彈性緩動曲線 (cubic-bezier) */
+      transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1),
+                  box-shadow 0.3s cubic-bezier(0.34, 1.56, 0.64, 1),
+                  border-color 0.3s ease,
+                  background-color 0.4s ease;
+      will-change: transform, box-shadow;
+    }
+
+    /* 
+       HOVER 動態效果需求：
+       1. 滑鼠上移時卡向上懸浮 6PX
+       2. 陰影擴大並變深呈現模糊柔和立體效果
+       3. 動態時間為 0.3 秒並帶有彈性緩動曲線
+    */
+    .card:hover {
+      transform: translateY(-6px);
+      box-shadow: 0 22px 45px rgba(0, 0, 0, 0.6), 
+                  0 8px 18px rgba(0, 0, 0, 0.4);
+      border-color: rgba(255, 255, 255, 0.25);
+    }
+
+    body.theme-light .card:hover {
+      box-shadow: 0 22px 45px rgba(0, 0, 0, 0.12), 
+                  0 8px 18px rgba(0, 0, 0, 0.06);
+      border-color: rgba(0, 0, 0, 0.25);
+    }
+
+    /* ==========================================================================
+       5. 名片內容元素 (Card Inner Components)
+       ========================================================================== */
+    /* 頭像站位區 */
+    .avatar-wrapper {
+      position: relative;
+      margin-bottom: 24px;
+    }
+
+    .avatar-placeholder {
+      width: 96px;
+      height: 96px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, #222222 0%, #000000 100%);
+      border: 2px solid var(--text-main);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      color: #ffffff;
+      font-weight: 700;
+      font-size: 1.5rem;
+      letter-spacing: 2px;
+      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
+      overflow: hidden;
+      position: relative;
+    }
+
+    body.theme-light .avatar-placeholder {
+      background: linear-gradient(135deg, #ffffff 0%, #e0e0e0 100%);
+      color: #000000;
+      border-color: #000000;
+    }
+
+    /* 幾何頭像裝飾線條 */
+    .avatar-placeholder::after {
+      content: "";
+      position: absolute;
+      width: 200%;
+      height: 200%;
+      background: repeating-linear-gradient(
+        45deg,
+        transparent,
+        transparent 10px,
+        rgba(255, 255, 255, 0.05) 10px,
+        rgba(255, 255, 255, 0.05) 20px
+      );
+    }
+
+    /* 接案狀態指示標籤 */
+    .status-badge {
+      position: absolute;
+      bottom: 2px;
+      right: 2px;
+      background: #000000;
+      border: 1px solid var(--text-main);
+      width: 22px;
+      height: 22px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .status-dot {
+      width: 8px;
+      height: 8px;
+      background-color: #00ff66;
+      border-radius: 50%;
+      box-shadow: 0 0 8px #00ff66;
+    }
+
+    /* 姓名與職稱 */
+    .user-name {
+      font-size: 1.65rem;
+      font-weight: 700;
+      letter-spacing: -0.5px;
+      margin-bottom: 6px;
+      color: var(--text-main);
+    }
+
+    .user-title {
+      font-size: 0.85rem;
+      font-weight: 500;
+      text-transform: uppercase;
+      letter-spacing: 2px;
+      color: var(--text-muted);
+      margin-bottom: 20px;
+    }
+
+    /* 簡介標籤 */
+    .tags-container {
+      display: flex;
+      gap: 8px;
+      margin-bottom: 28px;
+      flex-wrap: wrap;
+      justify-content: center;
+    }
+
+    .tag {
+      font-size: 0.7rem;
+      padding: 4px 10px;
+      border-radius: 20px;
+      border: 1px solid var(--card-border);
+      color: var(--text-muted);
+      letter-spacing: 0.5px;
+    }
+
+    /* 主要動作按鈕 (Action Button) */
+    .action-btn {
+      width: 100%;
+      padding: 14px 24px;
+      background-color: var(--text-main);
+      color: var(--bg-color);
+      border: none;
+      border-radius: 12px;
+      font-size: 0.9rem;
+      font-weight: 700;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+    }
+
+    .action-btn:hover {
+      opacity: 0.9;
+      transform: scale(1.02);
+    }
+
+    .action-btn:active {
+      transform: scale(0.98);
+    }
+
+    /* 社群小圖示列 */
+    .social-links {
+      display: flex;
+      gap: 16px;
+      margin-top: 24px;
+    }
+
+    .social-icon {
+      color: var(--text-muted);
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      border: 1px solid var(--card-border);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      text-decoration: none;
+      transition: all 0.2s ease;
+    }
+
+    .social-icon:hover {
+      color: var(--text-main);
+      border-color: var(--text-main);
+      transform: translateY(-2px);
+    }
+
+    /* 提示訊息 Toast */
+    .toast {
+      position: fixed;
+      bottom: 30px;
+      background: var(--text-main);
+      color: var(--bg-color);
+      padding: 10px 20px;
+      border-radius: 30px;
+      font-size: 0.85rem;
+      font-weight: 600;
+      opacity: 0;
+      transform: translateY(20px);
+      transition: all 0.3s ease;
+      pointer-events: none;
+      z-index: 100;
+      box-shadow: 0 10px 25px rgba(0,0,0,0.3);
+    }
+
+    .toast.show {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  </style>
+</head>
+<body class="theme-dark">
+
+  <!-- 1. 背景顏色切換選單 -->
+  <div class="controls-wrapper">
+    <div class="theme-switcher">
+      <button class="theme-btn active" data-theme="dark">
+        <span class="dot"></span>極黑
+      </button>
+      <button class="theme-btn" data-theme="light">
+        <span class="dot"></span>純白
+      </button>
+      <button class="theme-btn" data-theme="grid">
+        <span class="dot"></span>灰調
+      </button>
+    </div>
+  </div>
+
+  <!-- 2. 設計師名片卡片主體 -->
+  <div class="card-container">
+    <div class="card">
+      
+      <!-- 頭像站位區 -->
+      <div class="avatar-wrapper">
+        <div class="avatar-placeholder">
+          <span>HS</span>
+        </div>
+        <div class="status-badge" title="Available for freelance">
+          <div class="status-dot"></div>
+        </div>
+      </div>
+
+      <!-- 姓名與職稱 -->
+      <h1 class="user-name">張睿芯</h1>
+      <p class="user-title">Senior Product Designer</p>
+
+      <!-- 簡介標籤 -->
+      <div class="tags-container">
+        <span class="tag">UI/UX</span>
+        <span class="tag">Design System</span>
+        <span class="tag">Branding</span>
+      </div>
+
+      <!-- 主要按鈕 -->
+      <button class="action-btn" id="contactBtn">
+        <span>GET IN TOUCH</span>
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>
+      </button>
+
+      <!-- 社群連結 -->
+      <div class="social-links">
+        <a href="#" class="social-icon" title="Dribbble">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><path d="M19.13 5.09C15.22 9.14 10 10.44 2.25 10.94"></path><path d="M21.75 12.84c-6.62-1.41-12.14 1-16.38 6.32"></path><path d="M8.56 2.75c4.37 6 6 9.42 8 17.72"></path></svg>
+        </a>
+        <a href="#" class="social-icon" title="LinkedIn">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"></path><rect x="2" y="9" width="4" height="12"></rect><circle cx="4" cy="4" r="2"></circle></svg>
+        </a>
+        <a href="#" class="social-icon" title="GitHub">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"></path></svg>
+        </a>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- 提示訊息 -->
+  <div class="toast" id="toast">已複製 Email: contact@ruixin.design</div>
+
+  <!-- JavaScript 互動邏輯 -->
+  <script>
+    // 1. 背景色彩切換邏輯
+    const themeBtns = document.querySelectorAll('.theme-btn');
+    const body = document.body;
+
+    themeBtns.forEach(btn => {
+      btn.addEventListener('click', () => {
+        // 移除目前 active 狀態
+        themeBtns.forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+
+        // 切換 Body 主題 class
+        const theme = btn.getAttribute('data-theme');
+        body.className = `theme-${theme}`;
+      });
+    });
+
+    // 2. 按鈕點擊互動 (複製 Email 提示)
+    const contactBtn = document.getElementById('contactBtn');
+    const toast = document.getElementById('toast');
+
+    contactBtn.addEventListener('click', () => {
+      // 複製動作
+      navigator.clipboard.writeText('contact@ruixin.design').then(() => {
+        // 顯示 Toast
+        toast.classList.add('show');
+        setTimeout(() => {
+          toast.classList.remove('show');
+        }, 2500);
+      }).catch(err => {
+        // Fallback
+        toast.textContent = "contact@ruixin.design";
+        toast.classList.add('show');
+        setTimeout(() => {
+          toast.classList.remove('show');
+        }, 2500);
+      });
+    });
+  </script>
+</body>
+</html>
